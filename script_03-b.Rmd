@@ -50,14 +50,50 @@ sep_new <-
 
 a) Make a table using **gt** which shows the five courses with the biggest increase. Use the [How to make a table](https://davidkane9.github.io/PPBDS/tools.html#how-to-make-a-table) section of *The Primer*.
 
+```{r}
+sep_now <- inner_join(sep_new, sep_old, by=c("id","name"), suffix = c("_new", "_old")) %>%
+  mutate(difference = u_grad_new - u_grad_old) 
+
+sep_now_inc <- sep_now %>%
+  arrange(difference) %>%
+  slice(1:5) 
+
+sep_now_inc %>%
+  gt()
+
+```
+
+
 b) Make a table using **gt** which shows the five courses with the biggest decrease.
 
+```{r}
+sep_now_dec <- sep_now %>%
+  arrange(desc(difference)) %>%
+  slice(1:5) 
+
+sep_now_dec %>%
+  gt()
+  
+```
+
 c) Make a nice looking graphic which shows these 10 courses.
+
+```{r}
+rbind(sep_now_dec, sep_now_inc) %>%
+  ggplot(aes(fct_reorder(name,difference), difference, fill = department_new)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  coord_flip() +
+  theme_bw()
+```
 
 d) Write down some thoughts about what might explain these increases and decreases. Or is it all just random? How would we know?
 
 See [here](https://rpubs.com/dkane/week-3) for my answers. No need to copy exactly what I have done! Make yours better.
 
+```{r}
+
+```
 
 
 ## Scene 2
